@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/select_video_margin_vertical"
+      android:layout_marginBottom="@dimen/select_video_margin_vertical"
+      android:layout_marginLeft="@dimen/select_video_margin_left"
+      android:layout_marginStart="@dimen/select_video_margin_left"
+      android:text="@string/select_video"
+      android:textColor="#000000"
+      android:textSize="@dimen/welcome_page_font_size"/>
+
+  <ListView android:id="@+id/sample_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+
+</LinearLayout>
