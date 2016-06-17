@@ -25,7 +25,7 @@
         </activity>
 
         <activity
-            android:name=".activity.PlayerActivity"
+            android:name=".player.PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:label="@string/app_name"
