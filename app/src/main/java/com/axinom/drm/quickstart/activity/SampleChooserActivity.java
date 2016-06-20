@@ -26,8 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 // An activity for selecting samples.
@@ -40,9 +38,8 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	// URL to the authorization service API
 	private static final String API_AUTH = "https://drm-quick-start.azurewebsites.net/api/authorization/";
 
-	// hardcoded license server URLs
+	// hardcoded license server URL
 	public static final String WIDEVINE_LICENSE_SERVER = "https://drm-widevine-licensing.axtest.net/AcquireLicense";
-	public static final String PLAYREADY_LICENSE_SERVER = "https://drm-playready-licensing.axtest.net/AcquireLicense";
 
 	private ListView mListView;
 	private ArrayList<String> mVideoNames = new ArrayList<>();
@@ -115,7 +112,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	// This will prove to the license server that we have the right to play the video.
 	private void makeAuthorizationRequest(final int position) {
 		Request request = new StringRequest(Request.Method.GET,
-				API_AUTH + encodeURIComponent(mVideoNames.get(position)),
+				API_AUTH + android.net.Uri.encode(mVideoNames.get(position)),
 			new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -139,7 +136,6 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 		intent.setData(Uri.parse(mVideoUrls.get(position)));
 		intent.putExtra(PlayerActivity.LICENSE_TOKEN, mLicenseToken);
 		intent.putExtra(PlayerActivity.WIDEVINE_LICENSE_SERVER, WIDEVINE_LICENSE_SERVER);
-		intent.putExtra(PlayerActivity.PLAYREADY_LICENSE_SERVER, PLAYREADY_LICENSE_SERVER);
 		startActivity(intent);
 	}
 
@@ -147,20 +143,4 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		makeAuthorizationRequest(position);
 	}
-
-	public static String encodeURIComponent(String component)   {
-		String result;
-		try {
-			result = URLEncoder.encode(component, "UTF-8")
-					.replaceAll("\\%28", "(")
-					.replaceAll("\\%29", ")")
-					.replaceAll("\\+", "%20")
-					.replaceAll("\\%27", "'")
-					.replaceAll("\\%21", "!")
-					.replaceAll("\\%7E", "~");
-		} catch (UnsupportedEncodingException e) {
-			result = component;
-		}
-			return result;
-		}
-	}
+}

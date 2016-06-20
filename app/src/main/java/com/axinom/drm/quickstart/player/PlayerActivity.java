@@ -24,7 +24,6 @@ import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.axinom.drm.quickstart.R;
-import com.axinom.drm.quickstart.callbacks.SmoothStreamingTestMediaDrmCallback;
 import com.axinom.drm.quickstart.callbacks.WidevineTestMediaDrmCallback;
 import com.axinom.drm.quickstart.player.DemoPlayer.RendererBuilder;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
@@ -60,13 +59,10 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
 
   private static final String TAG = "PlayerActivity";
 
-  // hardcoded license server urls
   public static final String WIDEVINE_LICENSE_SERVER = "widevine_license_server";
-  public static final String PLAYREADY_LICENSE_SERVER = "playready_license_server";
   public static final String LICENSE_TOKEN = "license_token";
 
   private String mWidevineLicenseServer;
-  private String mPlayreadyLicenseServer;
   private String mLicenseToken;
 
   // For use within demo app code.
@@ -93,7 +89,6 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   private boolean playerNeedsPrepare;
 
   private long playerPosition;
-  private boolean enableBackgroundAudio;
 
   private Uri contentUri;
   private int contentType;
@@ -183,7 +178,6 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
 
     mLicenseToken = intent.getStringExtra(LICENSE_TOKEN);
     mWidevineLicenseServer = intent.getStringExtra(WIDEVINE_LICENSE_SERVER);
-    mPlayreadyLicenseServer = intent.getStringExtra(PLAYREADY_LICENSE_SERVER);
 
     configureSubtitleView();
     if (player == null) {
@@ -212,11 +206,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   }
 
   private void onHidden() {
-    if (!enableBackgroundAudio) {
-      releasePlayer();
-    } else {
-      player.setBackgrounded(true);
-    }
+    releasePlayer();
     shutterView.setVisibility(View.VISIBLE);
   }
 
@@ -295,16 +285,9 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
   public RendererBuilder getRendererBuilder() {
     String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
     switch (contentType) {
-      case Util.TYPE_SS:
-        return new SmoothStreamingRendererBuilder(this, userAgent, contentUri.toString(),
-                new SmoothStreamingTestMediaDrmCallback(mPlayreadyLicenseServer, mLicenseToken));
       case Util.TYPE_DASH:
         return new DashRendererBuilder(this, userAgent, contentUri.toString(),
                 new WidevineTestMediaDrmCallback(mWidevineLicenseServer, mLicenseToken));
-      case Util.TYPE_HLS:
-        return new HlsRendererBuilder(this, userAgent, contentUri.toString());
-      case Util.TYPE_OTHER:
-        return new ExtractorRendererBuilder(this, userAgent, contentUri);
       default:
         throw new IllegalStateException("Unsupported type: " + contentType);
     }
