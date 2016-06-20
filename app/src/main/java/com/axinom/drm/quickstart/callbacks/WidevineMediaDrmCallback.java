@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * A {@link MediaDrmCallback} for Widevine test content.
+ * A {@link MediaDrmCallback} for Widevine content.
  */
 @TargetApi(18)
-public class WidevineTestMediaDrmCallback implements MediaDrmCallback {
+public class WidevineMediaDrmCallback implements MediaDrmCallback {
 
   private String mLicenseServer, mAxDrmMessage;
 
-  public WidevineTestMediaDrmCallback(String licenseServer, String axDrmMessage) {
+  public WidevineMediaDrmCallback(String licenseServer, String axDrmMessage) {
     // license server URL has hardcoded value of: "https://drm-widevine-licensing.axtest.net/AcquireLicense"
     // defined in SampleChooserActivity class
     mLicenseServer = licenseServer;

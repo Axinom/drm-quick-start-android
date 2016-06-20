@@ -3,7 +3,9 @@ package com.axinom.drm.quickstart.player;
 import android.Manifest.permission;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,7 +26,7 @@ import android.widget.MediaController;
 import android.widget.Toast;
 
 import com.axinom.drm.quickstart.R;
-import com.axinom.drm.quickstart.callbacks.WidevineTestMediaDrmCallback;
+import com.axinom.drm.quickstart.callbacks.WidevineMediaDrmCallback;
 import com.axinom.drm.quickstart.player.DemoPlayer.RendererBuilder;
 import com.google.android.exoplayer.AspectRatioFrameLayout;
 import com.google.android.exoplayer.ExoPlaybackException;
@@ -287,7 +289,7 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
     switch (contentType) {
       case Util.TYPE_DASH:
         return new DashRendererBuilder(this, userAgent, contentUri.toString(),
-                new WidevineTestMediaDrmCallback(mWidevineLicenseServer, mLicenseToken));
+                new WidevineMediaDrmCallback(mWidevineLicenseServer, mLicenseToken));
       default:
         throw new IllegalStateException("Unsupported type: " + contentType);
     }
@@ -361,11 +363,26 @@ public class PlayerActivity extends Activity implements SurfaceHolder.Callback, 
       }
     }
     if (errorString != null) {
-      Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_LONG).show();
+      showAlertDialog(errorString);
     }
     playerNeedsPrepare = true;
     updateButtonVisibilities();
     showControls();
+  }
+
+  private void showAlertDialog(String message){
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder.setTitle("Error");
+    alertDialogBuilder
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog,int id) {
+                // Do nothing.
+              }
+            });
+    AlertDialog alertDialog = alertDialogBuilder.create();
+    alertDialog.show();
   }
 
   @Override
