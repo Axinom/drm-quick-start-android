@@ -33,8 +33,8 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 
 	private static final String TAG = SampleChooserActivity.class.getSimpleName();
 
-	// URL to the website API
-	private static final String API_WEBSITE = "https://drm-quick-start.azurewebsites.net/api/website/videos";
+	// URL to the catalog API
+	private static final String API_CATALOG = "https://drm-quick-start.azurewebsites.net/api/catalog/videos";
 	// URL to the authorization service API
 	private static final String API_AUTH = "https://drm-quick-start.azurewebsites.net/api/authorization/";
 
@@ -71,7 +71,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	// Let's first populate the video list.
 	// Called when activity is starting.
 	private void makeMoviesRequest() {
-		JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, API_WEBSITE, null,
+		JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, API_CATALOG, null,
 				new Response.Listener<JSONArray>() {
 			@Override
 			public void onResponse(JSONArray response) {
