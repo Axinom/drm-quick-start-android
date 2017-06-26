@@ -2,7 +2,7 @@
 
 This is an Android application that plays back DASH videos protected using Axinom DRM. The app works together with the [Axinom DRM quick start sample project](https://github.com/Axinom/drm-quick-start) which exposes web APIs providing data to the frontend.
 
-![](Images/Relation to drm-quick-start.png)
+![](Images/Relation%20to%20drm-quick-start.png)
 
 You do not need to deploy the drm-quick-start project to use this sample, as it works against an Axinom-hosted deployment of the APIs by default. Your own deployment of the APIs is only needed if you wish to customize the data used by the application.
 
