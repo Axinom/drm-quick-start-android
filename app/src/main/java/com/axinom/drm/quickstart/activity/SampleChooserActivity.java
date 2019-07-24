@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	private static final String API_AUTH = "https://drm-quick-start.azurewebsites.net/api/authorization/";
 
 	// hardcoded license server URL
-	public static final String WIDEVINE_LICENSE_SERVER = "https://drm-widevine-licensing.axtest.net/AcquireLicense";
+	private static final String WIDEVINE_LICENSE_SERVER = "https://drm-widevine-licensing.axtest.net/AcquireLicense";
 
 	private ListView mListView;
 	private ArrayList<String> mVideoNames = new ArrayList<>();
@@ -50,9 +52,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sample_chooser_activity);
-
-		mListView = (ListView) findViewById(R.id.sample_list);
-
+		mListView = findViewById(R.id.sample_list);
 		makeMoviesRequest();
 	}
 
@@ -87,11 +87,11 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 				}
 				ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(),
 				android.R.layout.simple_list_item_1, mVideoNames){
+					@NonNull
 					@Override
-					public View getView(int position, View convertView,
-						ViewGroup parent) {
+					public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 						View view =super.getView(position, convertView, parent);
-						TextView textView=(TextView) view.findViewById(android.R.id.text1);
+						TextView textView=view.findViewById(android.R.id.text1);
 						textView.setTextColor(Color.BLACK);
 						return view;
 					}
@@ -101,7 +101,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 			}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				Log.d(TAG, "Movies json was not loaded with error: " + error.getMessage());
+				Log.d(TAG, "Movies json was not loaded, error: " + error.getMessage());
 			}
 		});
 		BaseApp.requestQueue.add(request);

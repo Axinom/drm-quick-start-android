@@ -18,7 +18,7 @@ import java.util.UUID;
 @TargetApi(18)
 public class WidevineMediaDrmCallback implements MediaDrmCallback {
 
-  private String mLicenseServer, mAxDrmMessage;
+  private final String mLicenseServer, mAxDrmMessage;
 
   public WidevineMediaDrmCallback(String licenseServer, String axDrmMessage) {
     // license server URL has hardcoded value of: "https://drm-widevine-licensing.axtest.net/AcquireLicense"
