@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 // An activity for selecting samples.
 public class SampleChooserActivity extends Activity implements AdapterView.OnItemClickListener {
