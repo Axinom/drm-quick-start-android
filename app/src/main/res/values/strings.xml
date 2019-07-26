@@ -43,5 +43,9 @@
 
     <string name="error_player_unknown">An unknown player error: %1$s</string>
 
+    <string name="error_video_list">Error loading list of videos</string>
+
+    <string name="error_drm_token">Error getting DRM token from server</string>
+
     <string name="storage_permission_denied">Permission to access storage was denied</string>
 </resources>
