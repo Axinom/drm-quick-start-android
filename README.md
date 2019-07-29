@@ -8,11 +8,11 @@ You do not need to deploy the drm-quick-start project to use this sample, as it 
 
 # Sample scenarios
 
-This sample appliation can be used as an equivalent alternative to the web frontend in executing all the sample scenarios described by the [drm-quick-start sample project](https://github.com/Axinom/drm-quick-start). Refer to the latter for more information.
+This sample appliсation can be used as an equivalent alternative to the web frontend in executing all the sample scenarios described by the [drm-quick-start sample project](https://github.com/Axinom/drm-quick-start). Refer to the latter for more information.
 
 # Project structure
 
-This project uses [ExoPlayer](https://github.com/google/ExoPlayer) to play back DASH videos protected using Axinom DRM. It is largely based on ExoPlayer sample code.
+This project uses [ExoPlayer](https://github.com/google/ExoPlayer) to play back DASH videos protected using Axinom DRM. It is based on ExoPlayer sample code.
 
 ## Important files
 
@@ -22,9 +22,9 @@ This project uses [ExoPlayer](https://github.com/google/ExoPlayer) to play back 
 * Performs the API call to obtain video list from the catalog API.
 * Performs the API call to obtain the license token from the authorization service API.
 
-[WidevineMediaDrmCallback.java](app/src/main/java/com/axinom/drm/quickstart/callbacks/WidevineMediaDrmCallback.java)
+[DemoPlayer.java](app/src/main/java/com/axinom/drm/quickstart/player/DemoPlayer.java)
 
-* Implements communications with the Axinom DRM license server.
+See *buildDrmSessionManager()* method which
 * Attaches the license token to license requests.
 
 ## Other major components

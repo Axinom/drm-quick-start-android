@@ -43,7 +43,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * A wrapper around {@link ExoPlayer} that provides a higher level interface.
  */
-public class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
+class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
 
   public static class Params {
     Uri contentUri;

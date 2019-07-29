@@ -1,17 +1,6 @@
-# Built application files
-*.apk
-*.ap_
-
-# Files for the ART/Dalvik VM
-*.dex
-
-# Java class files
-*.class
-
 # Generated files
 bin/
 gen/
-out/
 
 # Gradle files
 .gradle/
@@ -35,6 +24,7 @@ captures/
 # Intellij
 *.iml
 .idea/workspace.xml
+.idea/misc.xml
 .idea/libraries
 .idea/scopes
 .idea/.name
@@ -42,6 +32,8 @@ captures/
 .idea/copyright
 .idea/gradle.xml
 .idea/modules.xml
+.idea/caches/
+.idea/codeStyles/
 
 # Keystore files
 *.jks

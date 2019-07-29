@@ -75,7 +75,6 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
   private void handleIntent(Intent intent){
     Log.d(TAG, "handleIntent() called with: intent = [" + intent + "]");
     mContentUri = intent.getData();
-    Log.d(TAG, "contentUri = " + mContentUri.toString());
     mContentType = intent.getIntExtra(CONTENT_TYPE_EXTRA,
             inferContentType(mContentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
     mLicenseToken = intent.getStringExtra(LICENSE_TOKEN);
@@ -210,12 +209,11 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
   @Override
   public void onPlayerError(Exception e) {
     Log.d(TAG, "onPlayerError() called with: e = [" + e + "]");
-    String errorString = null;
+    String errorString;
     if (e instanceof UnsupportedDrmException) {
       // Special case DRM failures.
       UnsupportedDrmException unsupportedDrmException = (UnsupportedDrmException) e;
-      errorString = getString(Util.SDK_INT < 18 ? R.string.error_drm_not_supported
-              : unsupportedDrmException.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
+      errorString = getString(unsupportedDrmException.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
               ? R.string.error_drm_unsupported_scheme : R.string.error_drm_unknown);
     } else if (e instanceof ExoPlaybackException
             && e.getCause() instanceof MediaCodecRenderer.DecoderInitializationException) {
@@ -239,9 +237,7 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
     } else {
       errorString = getString(R.string.error_player_unknown, e.getMessage());
     }
-    if (errorString != null) {
-      showAlertDialog(errorString);
-    }
+    showAlertDialog(errorString);
   }
 
   private void showAlertDialog(String message){

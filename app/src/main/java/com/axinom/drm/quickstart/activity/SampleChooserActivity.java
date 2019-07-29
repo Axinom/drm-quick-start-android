@@ -1,18 +1,14 @@
 package com.axinom.drm.quickstart.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,13 +26,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 // An activity for selecting samples.
 public class SampleChooserActivity extends Activity implements AdapterView.OnItemClickListener {
 
-	private enum RequestStatus { NONE, LOADING, LOADED, ERROR };
+	private enum RequestStatus { NONE, LOADING, LOADED, ERROR }
 	private static final String TAG = SampleChooserActivity.class.getSimpleName();
 
 	// URL to the catalog API
@@ -48,9 +41,9 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	private static final String WIDEVINE_LICENSE_SERVER = "https://drm-widevine-licensing.axtest.net/AcquireLicense";
 
 	private ListView mListView;
-	private VideoListAdapter mListAdapter;
-	private ArrayList<String> mVideoNames = new ArrayList<>();
-	private ArrayList<String> mVideoUrls = new ArrayList<>();
+	private ArrayAdapter<String> mListAdapter;
+	private final ArrayList<String> mVideoNames = new ArrayList<>();
+	private final ArrayList<String> mVideoUrls = new ArrayList<>();
 	private String mLicenseToken;
 	private RequestStatus mListRequestStatus;
 
@@ -59,7 +52,7 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sample_chooser_activity);
 		mListView = findViewById(R.id.sample_list);
-		mListAdapter = new VideoListAdapter(this);
+		mListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 		mListView.setAdapter(mListAdapter);
 		mListRequestStatus = RequestStatus.NONE;
 	}
@@ -154,22 +147,6 @@ public class SampleChooserActivity extends Activity implements AdapterView.OnIte
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		makeAuthorizationRequest(position);
-	}
-
-	private class VideoListAdapter extends ArrayAdapter<String> {
-
-		VideoListAdapter(Context context){
-			super(context, android.R.layout.simple_list_item_1);
-		}
-
-		@NonNull
-		@Override
-		public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-			View view = super.getView(position, convertView, parent);
-			TextView textView=view.findViewById(android.R.id.text1);
-			textView.setTextColor(Color.BLACK);
-			return view;
-		}
 	}
 
 }
