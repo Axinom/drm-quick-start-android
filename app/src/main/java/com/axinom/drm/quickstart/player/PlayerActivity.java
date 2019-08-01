@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,23 +37,16 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
   public static final String LICENSE_TOKEN = "license_token";
 
   private Uri mContentUri;
-  private int mContentType;
   private String mWidevineLicenseServer;
   private String mLicenseToken;
   // save last playback position on suspend
   private long mPlayerPosition;
   private boolean mPlayerStartOnPrepared;
 
-  // For use within demo app code.
-  public static final String CONTENT_TYPE_EXTRA = "content_type";
-
-  // For use when launching the demo app using adb.
-  private static final String CONTENT_EXT_EXTRA = "type";
-
-  private static final CookieManager defaultCookieManager;
+  private static final CookieManager sDefaultCookieManager;
   static {
-    defaultCookieManager = new CookieManager();
-    defaultCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+    sDefaultCookieManager = new CookieManager();
+    sDefaultCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
   }
 
   private PlayerView mPlayerView;
@@ -66,8 +58,8 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
     setContentView(R.layout.player_activity);
     mPlayerView = findViewById(R.id.player_view);
     CookieHandler currentHandler = CookieHandler.getDefault();
-    if (currentHandler != defaultCookieManager) {
-      CookieHandler.setDefault(defaultCookieManager);
+    if (currentHandler != sDefaultCookieManager) {
+      CookieHandler.setDefault(sDefaultCookieManager);
     }
     handleIntent(getIntent());
   }
@@ -75,8 +67,6 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
   private void handleIntent(Intent intent){
     Log.d(TAG, "handleIntent() called with: intent = [" + intent + "]");
     mContentUri = intent.getData();
-    mContentType = intent.getIntExtra(CONTENT_TYPE_EXTRA,
-            inferContentType(mContentUri, intent.getStringExtra(CONTENT_EXT_EXTRA)));
     mLicenseToken = intent.getStringExtra(LICENSE_TOKEN);
     mWidevineLicenseServer = intent.getStringExtra(WIDEVINE_LICENSE_SERVER);
     mPlayerPosition = 0;
@@ -159,25 +149,6 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
             != PackageManager.PERMISSION_GRANTED;
   }
 
-  // Internal methods
-
-
-/*
-  public RendererBuilder getRendererBuilder() {
-    String userAgent = Util.getUserAgent(this, "ExoPlayerDemo");
-    switch (mContentType) {
-      case Util.TYPE_DASH:
-        /*return new DashRendererBuilder(this, userAgent, mContentUri.toString(),
-                new WidevineMediaDrmCallback(mWidevineLicenseServer, mLicenseToken)); //
-        return new DashRendererBuilder(this, "ExoPlayerDemo", mContentUri.toString(),
-                new HttpMediaDrmCallback())
-      default:
-        throw new IllegalStateException("Unsupported type: " + mContentType);
-    }
-    executeKeyRequest
-     requestProperties.put("X-AxDRM-Message", mAxDrmMessage);
-  } */
-
   private void preparePlayer() {
     Log.d(TAG, "preparePlayer() called");
     DemoPlayer.Params params = new DemoPlayer.Params();
@@ -234,6 +205,8 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
         errorString = getString(R.string.error_instantiating_decoder,
                 decoderInitializationException.decoderName);
       }
+    } else if (e instanceof DemoPlayer.UnsupportedFormatException){
+      errorString = getString(R.string.error_unsupported_file_format);
     } else {
       errorString = getString(R.string.error_player_unknown, e.getMessage());
     }
@@ -254,20 +227,5 @@ public class PlayerActivity extends Activity implements DemoPlayer.Listener {
     AlertDialog alertDialog = alertDialogBuilder.create();
     alertDialog.show();
   }
-
-  /**
-   * Makes a best guess to infer the type from a media {@link Uri} and an optional overriding file
-   * extension.
-   *
-   * @param uri The {@link Uri} of the media.
-   * @param fileExtension An overriding file extension.
-   * @return The inferred type.
-   */
-  private static int inferContentType(Uri uri, String fileExtension) {
-    String lastPathSegment = !TextUtils.isEmpty(fileExtension) ? "." + fileExtension
-            : uri.getLastPathSegment();
-    return Util.inferContentType(lastPathSegment);
-  }
-
 
 }

@@ -53,6 +53,8 @@ class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
     boolean startOnPrepared = true;
   }
 
+  public static class UnsupportedFormatException extends Exception { }
+
   /**
    * Listener interface for player events.
    */
@@ -67,7 +69,6 @@ class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
   private boolean mPlayerIsCreated = false;
   private Context mContext;
 
-  private DefaultTrackSelector mTrackSelector;
   private final CopyOnWriteArrayList<Listener> mListeners;
 
 
@@ -82,20 +83,23 @@ class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
 
   private void playerCreate(Params params){
     TrackSelection.Factory trackSelectionFactory = new AdaptiveTrackSelection.Factory();
-    mTrackSelector = new DefaultTrackSelector(trackSelectionFactory);
+    DefaultTrackSelector trackSelector = new DefaultTrackSelector(trackSelectionFactory);
     // TODO: more parameters?
-    mTrackSelector.setParameters(new DefaultTrackSelector.ParametersBuilder().setPreferredTextLanguage("eng"));
+    trackSelector.setParameters(new DefaultTrackSelector.ParametersBuilder().setPreferredTextLanguage("eng"));
 
 
     DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(mContext);
     try {
       mPlayerIsCreated = false;
+      if (Util.inferContentType(params.contentUri) != C.TYPE_DASH){
+          throw new UnsupportedFormatException();
+      }
       DrmSessionManager<FrameworkMediaCrypto> sessionManager = buildDrmSessionManager(
               mContext, params.licenseServer, params.axDrmMessage);
-      mPlayer = ExoPlayerFactory.newSimpleInstance(mContext, renderersFactory, mTrackSelector, sessionManager);
+      mPlayer = ExoPlayerFactory.newSimpleInstance(mContext, renderersFactory, trackSelector, sessionManager);
       mPlayer.addListener(this);
       mPlayerIsCreated = true;
-    } catch (UnsupportedDrmException | NullPointerException e){
+    } catch (UnsupportedDrmException | UnsupportedFormatException | NullPointerException e){
       Log.d(TAG, "playerCreate() exception = " + e.getMessage());
       dispatchPlayerError(e);
     }
@@ -142,7 +146,7 @@ class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
 
   public void prepare(Params params, PlayerView playerView) {
     Log.d(TAG, "prepare() called with: params = [" + params + "]");
-    release();
+    playerRelease();
     playerCreate(params);
     if (isCreated()) {
       mPlayer.setPlayWhenReady(params.startOnPrepared);
@@ -154,9 +158,17 @@ class DemoPlayer implements ExoPlayer.EventListener, VideoListener, TextOutput {
     }
   }
 
+  private void playerRelease(){
+    if (mPlayer != null) {
+      mPlayer.release();
+      mPlayer = null;
+    }
+  }
+
 
   public void release() {
-    if (mPlayer != null) mPlayer.release();
+    playerRelease();
+    mContext = null;
   }
 
   public long getCurrentPosition() {
