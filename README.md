@@ -33,7 +33,7 @@ ExoPlayer demo application code is in the [player](app/src/main/java/com/axinom/
 
 # Device compatibility
 
-This project is compatible with devices running Android 4.4 or newer. This project is **not** compatible with the Android emulator.
+This project is compatible with devices running Android 4.4 or newer.
 
 # How to run the application
 
