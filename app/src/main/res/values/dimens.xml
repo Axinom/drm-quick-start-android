@@ -1,5 +1,0 @@
-<resources>
-    <dimen name="welcome_page_font_size">20sp</dimen>
-    <dimen name="welcome_page_margin_vertical">20sp</dimen>
-    <dimen name="welcome_page_margin_horizontal">20sp</dimen>
-</resources>
